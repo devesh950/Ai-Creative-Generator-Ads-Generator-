@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+ai-service/venv/
+ai-service/__pycache__/
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# Build outputs
+frontend/dist/
+frontend/build/
+backend/dist/
+*.log
+
+# Uploads and temporary files
+uploads/
+temp/
+*.tmp
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+.nyc_output/
+
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.so
+
+# AI Models (large files)
+ai-service/models/*.pth
+ai-service/models/*.onnx
+ai-service/models/*.pb
