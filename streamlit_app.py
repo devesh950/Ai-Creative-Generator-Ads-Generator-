@@ -561,12 +561,12 @@ if st.session_state.uploaded_images:
                         b = int(gradient[0][2] + (gradient[1][2] - gradient[0][2]) * i / fmt['size'][1])
                         draw.rectangle([(0, i), (fmt['size'][0], i+1)], fill=(r, g, b))
                     
-                    # Fonts - ensure they load properly
+                    # MASSIVE fonts for professional retail ads
                     try:
-                        font_title = ImageFont.truetype("arialbd.ttf", 160)
-                        font_subtitle = ImageFont.truetype("arialbd.ttf", 95)
-                        font_small = ImageFont.truetype("arial.ttf", 48)
-                        font_badge = ImageFont.truetype("arialbd.ttf", 40)
+                        font_title = ImageFont.truetype("arialbd.ttf", 220)      # HUGE
+                        font_subtitle = ImageFont.truetype("arialbd.ttf", 140)   # VERY BIG
+                        font_small = ImageFont.truetype("arial.ttf", 65)         # READABLE
+                        font_badge = ImageFont.truetype("arialbd.ttf", 45)
                     except Exception as e:
                         try:
                             font_title = ImageFont.truetype("Arial.ttf", 160)
@@ -596,50 +596,45 @@ if st.session_state.uploaded_images:
                     discount_text = random.choice(['35% OFF', '50% OFF', 'SALE'])
                     draw.text((fmt['size'][0]-95, 95), discount_text, fill='#FFD700', font=font_badge, anchor='mm')
                     
-                    # PRODUCT - HUGE (65% height for better balance)
-                    img_height = int(fmt['size'][1] * 0.65)
+                    # PRODUCT - BIGGER (take more space)
+                    img_height = int(fmt['size'][1] * 0.55)
                     img_ratio = img.width / img.height
                     img_width = int(img_height * img_ratio)
                     
-                    # Limit width to 55% if too wide
-                    max_img_width = int(fmt['size'][0] * 0.55)
+                    # Limit width to 60% if too wide
+                    max_img_width = int(fmt['size'][0] * 0.60)
                     if img_width > max_img_width:
                         img_width = max_img_width
                         img_height = int(img_width / img_ratio)
                     
                     resized_img = img.resize((img_width, img_height), Image.Resampling.LANCZOS)
                     
-                    # Center product
+                    # Center product higher
                     img_x = (fmt['size'][0] - img_width) // 2
-                    img_y = int(fmt['size'][1] * 0.08)  # Start from 8% from top
+                    img_y = int(fmt['size'][1] * 0.12)  # Start higher
                     canvas.paste(resized_img, (img_x, img_y), resized_img if resized_img.mode == 'RGBA' else None)
                     
-                    # TEXT - positioned below product with proper spacing
+                    # BIG TEXT below product
                     draw = ImageDraw.Draw(canvas)
                     
                     headline = random.choice(headlines)
                     offer = random.choice(offers)
                     subtext = random.choice(subtexts)
                     
-                    # Calculate text position based on product end
-                    text_y = img_y + img_height + 35
+                    # Text position - right after product with minimal gap
+                    text_y = img_y + img_height + 25
                     
-                    # Ensure text fits - adjust if needed
-                    remaining_space = fmt['size'][1] - text_y - 60
-                    if remaining_space < 200:
-                        text_y = fmt['size'][1] - 260
-                    
-                    # Title - BIG and BOLD
+                    # HUGE Title
                     draw.text((center_x, text_y), headline.upper(), fill='#000000', 
-                            font=font_title, anchor='mm')
+                            font=font_title, anchor='mm', stroke_width=3, stroke_fill='#FFFFFF')
                     
-                    # Subtitle - BOLD
-                    draw.text((center_x, text_y + 100), offer.upper(), fill='#000000', 
-                            font=font_subtitle, anchor='mm')
+                    # BIG Subtitle  
+                    draw.text((center_x, text_y + 150), offer.upper(), fill='#000000', 
+                            font=font_subtitle, anchor='mm', stroke_width=2, stroke_fill='#FFFFFF')
                     
-                    # Small text at very bottom
-                    draw.text((center_x, fmt['size'][1] - 50), subtext, fill='#000000', 
-                            font=font_small, anchor='mm')
+                    # Readable small text
+                    draw.text((center_x, fmt['size'][1] - 60), subtext, fill='#000000', 
+                            font=font_small, anchor='mm', stroke_width=1, stroke_fill='#FFFFFF')
                     
                     st.session_state.generated_ads.append({
                         'image': canvas,
