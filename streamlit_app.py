@@ -561,27 +561,40 @@ if st.session_state.uploaded_images:
                         b = int(gradient[0][2] + (gradient[1][2] - gradient[0][2]) * i / fmt['size'][1])
                         draw.rectangle([(0, i), (fmt['size'][0], i+1)], fill=(r, g, b))
                     
-                    # Fonts
+                    # Fonts - ensure they load properly
                     try:
-                        font_title = ImageFont.truetype("arialbd.ttf", 160)      # MUCH BIGGER
-                        font_subtitle = ImageFont.truetype("arialbd.ttf", 95)    # MUCH BIGGER
-                        font_small = ImageFont.truetype("arial.ttf", 48)         # MUCH BIGGER
-                        font_badge = ImageFont.truetype("arialbd.ttf", 35)
-                    except:
-                        font_title = font_subtitle = font_small = font_badge = ImageFont.load_default()
+                        font_title = ImageFont.truetype("arialbd.ttf", 160)
+                        font_subtitle = ImageFont.truetype("arialbd.ttf", 95)
+                        font_small = ImageFont.truetype("arial.ttf", 48)
+                        font_badge = ImageFont.truetype("arialbd.ttf", 40)
+                    except Exception as e:
+                        try:
+                            font_title = ImageFont.truetype("Arial.ttf", 160)
+                            font_subtitle = ImageFont.truetype("Arial.ttf", 95)
+                            font_small = ImageFont.truetype("Arial.ttf", 48)
+                            font_badge = ImageFont.truetype("Arial.ttf", 40)
+                        except:
+                            # Fallback to default with larger size
+                            font_title = ImageFont.load_default()
+                            font_subtitle = ImageFont.load_default()
+                            font_small = ImageFont.load_default()
+                            font_badge = ImageFont.load_default()
                     
                     center_x = fmt['size'][0] // 2
                     palette_idx = ["Tesco Official", "Purple Gradient", "Blue Green", "Warm Sunset"].index(selected_palette)
                     
-                    # Corner badges - SMALL like reference
+                    # Corner badges
                     draw = ImageDraw.Draw(canvas)
-                    draw.ellipse([30, 30, 150, 150], fill='#D4A017')
-                    draw.text((90, 70), 'TESCO', fill='#000000', font=font_badge, anchor='mm')
-                    draw.text((90, 100), 'VALUE', fill='#000000', font=font_small, anchor='mm')
                     
-                    draw.ellipse([fmt['size'][0]-150, 30, fmt['size'][0]-30, 150], fill='#3E2723', outline='#FFD700', width=3)
+                    # Left badge - Gold
+                    draw.ellipse([30, 30, 160, 160], fill='#E8A317')
+                    draw.text((95, 75), 'TESCO', fill='#000000', font=font_badge, anchor='mm')
+                    draw.text((95, 110), 'VALUE', fill='#000000', font=font_small, anchor='mm')
+                    
+                    # Right badge - Dark with gold border
+                    draw.ellipse([fmt['size'][0]-160, 30, fmt['size'][0]-30, 160], fill='#3E2723', outline='#FFD700', width=4)
                     discount_text = random.choice(['35% OFF', '50% OFF', 'SALE'])
-                    draw.text((fmt['size'][0]-90, 80), discount_text, fill='#FFD700', font=font_badge, anchor='mm')
+                    draw.text((fmt['size'][0]-95, 95), discount_text, fill='#FFD700', font=font_badge, anchor='mm')
                     
                     # PRODUCT - HUGE (65% height for better balance)
                     img_height = int(fmt['size'][1] * 0.65)
