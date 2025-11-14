@@ -577,51 +577,55 @@ if st.session_state.uploaded_images:
                     draw = ImageDraw.Draw(canvas)
                     draw.ellipse([30, 30, 150, 150], fill='#D4A017')
                     draw.text((90, 70), 'TESCO', fill='#000000', font=font_badge, anchor='mm')
-                    draw.text((90, 100), 'ESTATE', fill='#000000', font=font_small, anchor='mm')
+                    draw.text((90, 100), 'VALUE', fill='#000000', font=font_small, anchor='mm')
                     
                     draw.ellipse([fmt['size'][0]-150, 30, fmt['size'][0]-30, 150], fill='#3E2723', outline='#FFD700', width=3)
-                    draw.text((fmt['size'][0]-90, 65), 'WORLD', fill='#FFD700', font=font_small, anchor='mm')
-                    draw.text((fmt['size'][0]-90, 90), 'WINE', fill='#FFD700', font=font_badge, anchor='mm')
-                    draw.text((fmt['size'][0]-90, 115), 'AWARDS', fill='#FFD700', font=font_small, anchor='mm')
+                    discount_text = random.choice(['35% OFF', '50% OFF', 'SALE'])
+                    draw.text((fmt['size'][0]-90, 80), discount_text, fill='#FFD700', font=font_badge, anchor='mm')
                     
-                    # PRODUCT - HUGE (70% height)
-                    img_height = int(fmt['size'][1] * 0.70)
+                    # PRODUCT - HUGE (65% height for better balance)
+                    img_height = int(fmt['size'][1] * 0.65)
                     img_ratio = img.width / img.height
                     img_width = int(img_height * img_ratio)
                     
-                    # Limit width to 50% if too wide
-                    max_img_width = int(fmt['size'][0] * 0.50)
+                    # Limit width to 55% if too wide
+                    max_img_width = int(fmt['size'][0] * 0.55)
                     if img_width > max_img_width:
                         img_width = max_img_width
                         img_height = int(img_width / img_ratio)
                     
-                    resized_img = img.resize((img_width, img_height))
+                    resized_img = img.resize((img_width, img_height), Image.Resampling.LANCZOS)
                     
-                    # Center product vertically and horizontally
+                    # Center product
                     img_x = (fmt['size'][0] - img_width) // 2
-                    img_y = (fmt['size'][1] - img_height) // 2 - 20
+                    img_y = int(fmt['size'][1] * 0.08)  # Start from 8% from top
                     canvas.paste(resized_img, (img_x, img_y), resized_img if resized_img.mode == 'RGBA' else None)
                     
-                    # TEXT - positioned below product
+                    # TEXT - positioned below product with proper spacing
                     draw = ImageDraw.Draw(canvas)
                     
                     headline = random.choice(headlines)
                     offer = random.choice(offers)
                     subtext = random.choice(subtexts)
                     
-                    # Text starts after product
-                    text_y = img_y + img_height + 30
+                    # Calculate text position based on product end
+                    text_y = img_y + img_height + 35
                     
-                    # Title
+                    # Ensure text fits - adjust if needed
+                    remaining_space = fmt['size'][1] - text_y - 60
+                    if remaining_space < 200:
+                        text_y = fmt['size'][1] - 260
+                    
+                    # Title - BIG and BOLD
                     draw.text((center_x, text_y), headline.upper(), fill='#000000', 
                             font=font_title, anchor='mm')
                     
-                    # Subtitle
-                    draw.text((center_x, text_y + 80), offer.upper(), fill='#000000', 
+                    # Subtitle - BOLD
+                    draw.text((center_x, text_y + 100), offer.upper(), fill='#000000', 
                             font=font_subtitle, anchor='mm')
                     
                     # Small text at very bottom
-                    draw.text((center_x, fmt['size'][1] - 45), subtext, fill='#000000', 
+                    draw.text((center_x, fmt['size'][1] - 50), subtext, fill='#000000', 
                             font=font_small, anchor='mm')
                     
                     st.session_state.generated_ads.append({
