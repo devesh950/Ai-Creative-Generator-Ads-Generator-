@@ -109,32 +109,32 @@ st.markdown("""
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        font-size: 1.6rem !important;
-        font-weight: 800 !important;
+        font-size: 1.3rem !important;
+        font-weight: 700 !important;
         text-align: center;
-        margin-bottom: 0.3rem;
-        padding: 0.3rem 0;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     
     h2 {
         color: #667eea !important;
         font-weight: 700 !important;
-        font-size: 1.2rem !important;
+        font-size: 1rem !important;
     }
     
     h3 {
         color: #764ba2 !important;
         font-weight: 600 !important;
-        font-size: 1rem !important;
+        font-size: 0.9rem !important;
     }
     
     /* Feature cards */
     .feature-card {
         background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
-        padding: 0.8rem;
-        border-radius: 12px;
-        box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-        margin: 0.5rem 0;
+        padding: 0.5rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+        margin: 0.3rem 0;
         border: 2px solid #e0e7ff;
         transition: transform 0.3s ease;
     }
@@ -145,18 +145,18 @@ st.markdown("""
     }
     
     .feature-card h3 {
-        font-size: 1rem;
-        margin-bottom: 0.4rem;
+        font-size: 0.85rem;
+        margin-bottom: 0.2rem;
         color: #667eea !important;
         font-weight: 700 !important;
     }
     
     .feature-card p {
         color: #1f2937 !important;
-        font-size: 0.85rem;
-        line-height: 1.4;
+        font-size: 0.75rem;
+        line-height: 1.3;
         font-weight: 500;
-        margin-bottom: 0.2rem;
+        margin: 0;
     }
     
     /* Stat cards */
@@ -294,10 +294,10 @@ if 'generated_ads' not in st.session_state:
 
 # Header with attractive styling
 st.markdown("""
-<div style='text-align: center; padding: 0.5rem 0;'>
-    <h1 style='font-size: 1.6rem; margin-bottom: 0;'>✨ AI Creative Generator ✨</h1>
-    <p style='font-size: 0.85rem; color: #667eea; font-weight: 600; margin-top: 0.2rem;'>
-        Powered by AI • Fashion Retail Media
+<div style='text-align: center; padding: 0.3rem 0;'>
+    <h1 style='font-size: 1.3rem; margin: 0;'>✨ AI Creative Generator ✨</h1>
+    <p style='font-size: 0.7rem; color: #667eea; font-weight: 600; margin: 0.1rem 0;'>
+        AI-Powered Fashion Ads
     </p>
 </div>
 """, unsafe_allow_html=True)
@@ -310,29 +310,29 @@ if not st.session_state.uploaded_images:
     with col1:
         st.markdown("""
         <div class="feature-card">
-            <h3>✂️ Smart Background Removal</h3>
-            <p>Automatically remove backgrounds from product images with AI-powered edge detection</p>
+            <h3>✂️ Background Removal</h3>
+            <p>AI-powered edge detection</p>
         </div>
         """, unsafe_allow_html=True)
     
     with col2:
         st.markdown("""
         <div class="feature-card">
-            <h3>🎨 Custom Color Palettes</h3>
-            <p>Store and apply your brand colors instantly to all creatives</p>
+            <h3>🎨 Color Palettes</h3>
+            <p>Apply brand colors instantly</p>
         </div>
         """, unsafe_allow_html=True)
     
     with col3:
         st.markdown("""
         <div class="feature-card">
-            <h3>✅ Compliance Checker</h3>
-            <p>Auto-validate against brand and retailer guidelines with one-click fixes</p>
+            <h3>✅ Compliance Check</h3>
+            <p>Auto-validate guidelines</p>
         </div>
         """, unsafe_allow_html=True)
     
-    st.markdown("### 📤 Upload Product Images to Get Started")
-    st.markdown("**PNG, JPG, WebP** • Multiple files • Up to 100MB each")
+    st.markdown("### 📤 Upload Images")
+    st.markdown("**PNG, JPG** • Multiple files")
     
     # Main page upload option
     st.markdown("")
