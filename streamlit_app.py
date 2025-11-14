@@ -109,31 +109,32 @@ st.markdown("""
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        font-size: 2.2rem !important;
+        font-size: 1.6rem !important;
         font-weight: 800 !important;
         text-align: center;
-        margin-bottom: 0.5rem;
-        padding: 0.5rem 0;
+        margin-bottom: 0.3rem;
+        padding: 0.3rem 0;
     }
     
     h2 {
         color: #667eea !important;
         font-weight: 700 !important;
-        font-size: 1.5rem !important;
+        font-size: 1.2rem !important;
     }
     
     h3 {
         color: #764ba2 !important;
         font-weight: 600 !important;
+        font-size: 1rem !important;
     }
     
     /* Feature cards */
     .feature-card {
         background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
-        padding: 1.2rem;
-        border-radius: 15px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        margin: 0.8rem 0;
+        padding: 0.8rem;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+        margin: 0.5rem 0;
         border: 2px solid #e0e7ff;
         transition: transform 0.3s ease;
     }
@@ -144,18 +145,18 @@ st.markdown("""
     }
     
     .feature-card h3 {
-        font-size: 1.2rem;
-        margin-bottom: 0.6rem;
+        font-size: 1rem;
+        margin-bottom: 0.4rem;
         color: #667eea !important;
         font-weight: 700 !important;
     }
     
     .feature-card p {
         color: #1f2937 !important;
-        font-size: 0.95rem;
-        line-height: 1.5;
+        font-size: 0.85rem;
+        line-height: 1.4;
         font-weight: 500;
-        margin-bottom: 0.3rem;
+        margin-bottom: 0.2rem;
     }
     
     /* Stat cards */
@@ -293,10 +294,10 @@ if 'generated_ads' not in st.session_state:
 
 # Header with attractive styling
 st.markdown("""
-<div style='text-align: center; padding: 1rem 0 0.5rem 0;'>
-    <h1 style='font-size: 2.2rem; margin-bottom: 0;'>✨ AI Creative Generator ✨</h1>
-    <p style='font-size: 1.1rem; color: #667eea; font-weight: 600; margin-top: 0.3rem;'>
-        Powered by AI • Fashion Retail Media Innovation
+<div style='text-align: center; padding: 0.5rem 0;'>
+    <h1 style='font-size: 1.6rem; margin-bottom: 0;'>✨ AI Creative Generator ✨</h1>
+    <p style='font-size: 0.85rem; color: #667eea; font-weight: 600; margin-top: 0.2rem;'>
+        Powered by AI • Fashion Retail Media
     </p>
 </div>
 """, unsafe_allow_html=True)
