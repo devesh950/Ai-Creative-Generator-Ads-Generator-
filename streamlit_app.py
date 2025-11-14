@@ -629,21 +629,38 @@ if st.session_state.uploaded_images:
                     is_vertical = fmt['size'][1] > fmt['size'][0]  # Story/Reel format
                     is_wide = fmt['size'][0] > fmt['size'][1]  # Facebook Banner
                     
-                    try:
-                        if is_vertical:  # Stories/Reels
-                            font_headline = ImageFont.truetype("arialbd.ttf", 88)
-                            font_subhead = ImageFont.truetype("arial.ttf", 48)
-                            font_cta = ImageFont.truetype("arialbd.ttf", 70)
-                        elif is_wide:  # Facebook Banner
-                            font_headline = ImageFont.truetype("arialbd.ttf", 68)
-                            font_subhead = ImageFont.truetype("arial.ttf", 38)
-                            font_cta = ImageFont.truetype("arialbd.ttf", 54)
-                        else:  # Square
-                            font_headline = ImageFont.truetype("arialbd.ttf", 78)
-                            font_subhead = ImageFont.truetype("arial.ttf", 44)
-                            font_cta = ImageFont.truetype("arialbd.ttf", 64)
-                    except:
-                        font_headline = font_subhead = font_cta = ImageFont.load_default()
+                    # Try multiple font paths (Windows, Linux, cloud environments)
+                    font_paths = [
+                        ("arialbd.ttf", "arial.ttf"),  # Windows
+                        ("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"),  # Linux
+                        ("DejaVuSans-Bold.ttf", "DejaVuSans.ttf"),  # Generic
+                    ]
+                    
+                    font_headline = font_subhead = font_cta = None
+                    
+                    for bold_path, regular_path in font_paths:
+                        try:
+                            if is_vertical:  # Stories/Reels
+                                font_headline = ImageFont.truetype(bold_path, 88)
+                                font_subhead = ImageFont.truetype(regular_path, 48)
+                                font_cta = ImageFont.truetype(bold_path, 70)
+                            elif is_wide:  # Facebook Banner
+                                font_headline = ImageFont.truetype(bold_path, 68)
+                                font_subhead = ImageFont.truetype(regular_path, 38)
+                                font_cta = ImageFont.truetype(bold_path, 54)
+                            else:  # Square
+                                font_headline = ImageFont.truetype(bold_path, 78)
+                                font_subhead = ImageFont.truetype(regular_path, 44)
+                                font_cta = ImageFont.truetype(bold_path, 64)
+                            break  # Success, exit loop
+                        except:
+                            continue  # Try next font path
+                    
+                    # If all fonts fail, use PIL's default but with size simulation
+                    if font_headline is None:
+                        font_headline = ImageFont.load_default()
+                        font_subhead = ImageFont.load_default()
+                        font_cta = ImageFont.load_default()
                     
                     center_x = fmt['size'][0] // 2
                     center_y = fmt['size'][1] // 2
