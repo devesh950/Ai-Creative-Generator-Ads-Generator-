@@ -549,7 +549,7 @@ if st.session_state.uploaded_images:
             
             for img in st.session_state.uploaded_images:
                 for fmt in formats:
-                    # Create canvas with gradient
+                    # Canvas with gradient background
                     canvas = Image.new('RGB', fmt['size'], color='white')
                     draw = ImageDraw.Draw(canvas)
                     
@@ -561,93 +561,56 @@ if st.session_state.uploaded_images:
                         b = int(gradient[0][2] + (gradient[1][2] - gradient[0][2]) * i / fmt['size'][1])
                         draw.rectangle([(0, i), (fmt['size'][0], i+1)], fill=(r, g, b))
                     
-                    # TEXT FIRST - EXACTLY like reference
-                    draw = ImageDraw.Draw(canvas)
-                    
-                    # MASSIVE BOLD fonts - reference has HUGE text
-                    try:
-                        font_mega = ImageFont.truetype("arialbd.ttf", 140)      # NEW LOOK
-                        font_hero = ImageFont.truetype("arialbd.ttf", 85)       # SAME AWARD...
-                        font_medium = ImageFont.truetype("arial.ttf", 42)       # Available in...
-                        font_badge_large = ImageFont.truetype("arialbd.ttf", 45)
-                        font_badge_small = ImageFont.truetype("arial.ttf", 32)
-                    except:
-                        try:
-                            font_mega = ImageFont.truetype("Arial.ttf", 140)
-                            font_hero = ImageFont.truetype("Arial.ttf", 85)
-                            font_medium = ImageFont.truetype("Arial.ttf", 42)
-                            font_badge_large = ImageFont.truetype("Arial.ttf", 45)
-                            font_badge_small = ImageFont.truetype("Arial.ttf", 32)
-                        except:
-                            font_mega = font_hero = font_medium = font_badge_large = font_badge_small = ImageFont.load_default()
-                    
-                    palette_idx = ["Tesco Official", "Purple Gradient", "Blue Green", "Warm Sunset"].index(selected_palette)
-                    center_x = fmt['size'][0] // 2
-                    
-                    headline = random.choice(headlines)
-                    offer = random.choice(offers)
-                    subtext = random.choice(subtexts)
-                    
-                    # TOP LEFT - Circular badge (BRANCOTT ESTATE style)
-                    badge_radius = 85
-                    badge_x, badge_y = 100, 100
-                    draw.ellipse([badge_x - badge_radius, badge_y - badge_radius, 
-                                 badge_x + badge_radius, badge_y + badge_radius], 
-                                fill='#E8A317', outline=None)
-                    draw.text((badge_x, badge_y - 15), 'TESCO', fill='#000000', font=font_badge_large, 
-                            anchor='mm', stroke_width=0)
-                    draw.text((badge_x, badge_y + 25), 'VALUE', fill='#000000', font=font_badge_small, 
-                            anchor='mm', stroke_width=0)
-                    
-                    # TOP RIGHT - Award badge (WORLD WINE style)
-                    badge_r_radius = 80
-                    badge_r_x = fmt['size'][0] - 110
-                    badge_r_y = 110
-                    draw.ellipse([badge_r_x - badge_r_radius, badge_r_y - badge_r_radius, 
-                                 badge_r_x + badge_r_radius, badge_r_y + badge_r_radius], 
-                                fill='#4A3C2E', outline='#D4AF37', width=4)
-                    discount = random.choice(['35% OFF', '50% OFF', 'SALE'])
-                    draw.text((badge_r_x, badge_r_y - 10), discount.split()[0], fill='#FFD700', 
-                            font=font_badge_large, anchor='mm', stroke_width=0)
-                    if len(discount.split()) > 1:
-                        draw.text((badge_r_x, badge_r_y + 25), discount.split()[1], fill='#FFD700', 
-                                font=font_badge_small, anchor='mm', stroke_width=0)
-                    
-                    # PRODUCT IMAGE - centered, 50% width
-                    img_width = int(fmt['size'][0] * 0.50)
+                    # Product first - Large and centered
+                    img_width = int(fmt['size'][0] * 0.48)
                     img_ratio = img.height / img.width
                     img_height = int(img_width * img_ratio)
-                    
-                    # Limit height
-                    max_img_height = int(fmt['size'][1] * 0.55)
+                    max_img_height = int(fmt['size'][1] * 0.58)
                     if img_height > max_img_height:
                         img_height = max_img_height
                         img_width = int(img_height / img_ratio)
                     
                     resized_img = img.resize((img_width, img_height))
+                    img_x = (fmt['size'][0] - img_width) // 2
+                    img_y = int(fmt['size'][1] * 0.18)
+                    canvas.paste(resized_img, (img_x, img_y), resized_img if resized_img.mode == 'RGBA' else None)
                     
-                    # Position product - center
-                    x = (fmt['size'][0] - img_width) // 2
-                    y = int(fmt['size'][1] * 0.23)
-                    canvas.paste(resized_img, (x, y), resized_img if resized_img.mode == 'RGBA' else None)
+                    # Fonts - BIG and BOLD
+                    try:
+                        font_title = ImageFont.truetype("arialbd.ttf", 110)
+                        font_subtitle = ImageFont.truetype("arialbd.ttf", 68)
+                        font_small = ImageFont.truetype("arial.ttf", 38)
+                        font_badge = ImageFont.truetype("arialbd.ttf", 42)
+                    except:
+                        font_title = font_subtitle = font_small = font_badge = ImageFont.load_default()
                     
-                    # Redraw after image
                     draw = ImageDraw.Draw(canvas)
+                    center_x = fmt['size'][0] // 2
+                    palette_idx = ["Tesco Official", "Purple Gradient", "Blue Green", "Warm Sunset"].index(selected_palette)
                     
-                    # BOTTOM TEXT - RIGHT NEXT TO PRODUCT (like reference)
-                    text_start_y = y + img_height - 200  # Position text next to bottom of product
+                    # Badges
+                    # Left badge
+                    draw.ellipse([50, 50, 200, 200], fill='#E8A317')
+                    draw.text((125, 105), 'TESCO', fill='#000000', font=font_badge, anchor='mm')
+                    draw.text((125, 145), 'VALUE', fill='#000000', font=font_small, anchor='mm')
                     
-                    # "NEW LOOK" - MASSIVE BOLD BLACK
-                    draw.text((center_x, text_start_y), headline.upper(), fill='#000000', 
-                            font=font_mega, anchor='mm', stroke_width=0)
+                    # Right badge  
+                    draw.ellipse([fmt['size'][0]-200, 50, fmt['size'][0]-50, 200], fill='#4A3C2E', outline='#FFD700', width=4)
+                    discount = random.choice(['35%\nOFF', '50%\nOFF', 'SALE'])
+                    lines = discount.split('\n')
+                    draw.text((fmt['size'][0]-125, 110 if len(lines)==1 else 95), lines[0], fill='#FFD700', font=font_badge, anchor='mm')
+                    if len(lines) > 1:
+                        draw.text((fmt['size'][0]-125, 135), lines[1], fill='#FFD700', font=font_small, anchor='mm')
                     
-                    # "SAME AWARD WINNING TASTE" - Large bold
-                    draw.text((center_x, text_start_y + 120), offer.upper(), fill='#000000', 
-                            font=font_hero, anchor='mm', stroke_width=0)
+                    # Text at bottom - centered below product
+                    headline = random.choice(headlines)
+                    offer = random.choice(offers)
+                    subtext = random.choice(subtexts)
                     
-                    # "Available in all major retailers" - Small at very bottom
-                    draw.text((center_x, fmt['size'][1] - 70), subtext, fill='#000000', 
-                            font=font_medium, anchor='mm', stroke_width=0)
+                    text_y = img_y + img_height + 50
+                    draw.text((center_x, text_y), headline.upper(), fill='#000000', font=font_title, anchor='mm')
+                    draw.text((center_x, text_y + 95), offer.upper(), fill='#000000', font=font_subtitle, anchor='mm')
+                    draw.text((center_x, fmt['size'][1] - 60), subtext, fill='#000000', font=font_small, anchor='mm')
                     
                     st.session_state.generated_ads.append({
                         'image': canvas,
