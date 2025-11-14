@@ -338,7 +338,8 @@ st.markdown("---")
 
 # Landing page
 if not st.session_state.uploaded_images:
-    col1, col2, col3 = st.columns(3)
+    # Use equal column widths with specific ratio
+    col1, col2, col3 = st.columns([1, 1, 1])
     
     with col1:
         st.markdown("""
@@ -391,7 +392,7 @@ if not st.session_state.uploaded_images:
     
     st.markdown("")
     
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3 = st.columns([1, 1, 1])
     with col1:
         st.markdown('<div class="stat-card"><h2>4</h2><p>Social Formats</p></div>', unsafe_allow_html=True)
     with col2:
@@ -440,7 +441,7 @@ if st.session_state.uploaded_images:
     st.markdown("## 🖼️ Uploaded Images")
     
     # Add more images option
-    col1, col2 = st.columns([3, 1])
+    col1, col2 = st.columns([2, 1])
     with col2:
         add_more = st.file_uploader(
             "➕ Add More Images",
@@ -463,7 +464,7 @@ if st.session_state.uploaded_images:
                 st.success(f"✅ Added {new_images} more images!")
     
     # Display images in grid
-    cols = st.columns(6)
+    cols = st.columns([1, 1, 1, 1, 1, 1])
     
     for idx, img in enumerate(st.session_state.uploaded_images):
         with cols[idx % 6]:
@@ -477,7 +478,7 @@ if st.session_state.uploaded_images:
     st.markdown("---")
     
     # Image editing tools
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
     
     with col1:
         if st.button("✂️ Remove Background", use_container_width=True):
@@ -554,7 +555,7 @@ if st.session_state.uploaded_images:
     st.markdown("---")
     
     # Generate ads
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns([1, 1])
     
     with col1:
         if st.button("🎨 Generate Professional Creatives", use_container_width=True):
@@ -884,13 +885,13 @@ if st.session_state.generated_ads:
             st.info("Preparing downloads...")
     
     # Display in grid
-    cols = st.columns(4)
+    cols = st.columns([1, 1, 1, 1])
     for idx, ad in enumerate(st.session_state.generated_ads):
         with cols[idx % 4]:
             st.image(ad['image'], use_container_width=True)
             st.markdown(f"**{ad['format']}** • {ad['size']}")
             
-            col_a, col_b = st.columns(2)
+            col_a, col_b = st.columns([1, 1])
             with col_a:
                 # PNG download
                 buf = io.BytesIO()
