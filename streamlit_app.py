@@ -561,87 +561,93 @@ if st.session_state.uploaded_images:
                         b = int(gradient[0][2] + (gradient[1][2] - gradient[0][2]) * i / fmt['size'][1])
                         draw.rectangle([(0, i), (fmt['size'][0], i+1)], fill=(r, g, b))
                     
-                    # PRODUCT IMAGE - Hero size in center (like reference)
-                    img_width = int(fmt['size'][0] * 0.55)
+                    # TEXT FIRST - EXACTLY like reference
+                    draw = ImageDraw.Draw(canvas)
+                    
+                    # MASSIVE BOLD fonts - reference has HUGE text
+                    try:
+                        font_mega = ImageFont.truetype("arialbd.ttf", 140)      # NEW LOOK
+                        font_hero = ImageFont.truetype("arialbd.ttf", 85)       # SAME AWARD...
+                        font_medium = ImageFont.truetype("arial.ttf", 42)       # Available in...
+                        font_badge_large = ImageFont.truetype("arialbd.ttf", 45)
+                        font_badge_small = ImageFont.truetype("arial.ttf", 32)
+                    except:
+                        try:
+                            font_mega = ImageFont.truetype("Arial.ttf", 140)
+                            font_hero = ImageFont.truetype("Arial.ttf", 85)
+                            font_medium = ImageFont.truetype("Arial.ttf", 42)
+                            font_badge_large = ImageFont.truetype("Arial.ttf", 45)
+                            font_badge_small = ImageFont.truetype("Arial.ttf", 32)
+                        except:
+                            font_mega = font_hero = font_medium = font_badge_large = font_badge_small = ImageFont.load_default()
+                    
+                    palette_idx = ["Tesco Official", "Purple Gradient", "Blue Green", "Warm Sunset"].index(selected_palette)
+                    center_x = fmt['size'][0] // 2
+                    
+                    headline = random.choice(headlines)
+                    offer = random.choice(offers)
+                    subtext = random.choice(subtexts)
+                    
+                    # TOP LEFT - Circular badge (BRANCOTT ESTATE style)
+                    badge_radius = 85
+                    badge_x, badge_y = 100, 100
+                    draw.ellipse([badge_x - badge_radius, badge_y - badge_radius, 
+                                 badge_x + badge_radius, badge_y + badge_radius], 
+                                fill='#E8A317', outline=None)
+                    draw.text((badge_x, badge_y - 15), 'TESCO', fill='#000000', font=font_badge_large, 
+                            anchor='mm', stroke_width=0)
+                    draw.text((badge_x, badge_y + 25), 'VALUE', fill='#000000', font=font_badge_small, 
+                            anchor='mm', stroke_width=0)
+                    
+                    # TOP RIGHT - Award badge (WORLD WINE style)
+                    badge_r_radius = 80
+                    badge_r_x = fmt['size'][0] - 110
+                    badge_r_y = 110
+                    draw.ellipse([badge_r_x - badge_r_radius, badge_r_y - badge_r_radius, 
+                                 badge_r_x + badge_r_radius, badge_r_y + badge_r_radius], 
+                                fill='#4A3C2E', outline='#D4AF37', width=4)
+                    discount = random.choice(['35% OFF', '50% OFF', 'SALE'])
+                    draw.text((badge_r_x, badge_r_y - 10), discount.split()[0], fill='#FFD700', 
+                            font=font_badge_large, anchor='mm', stroke_width=0)
+                    if len(discount.split()) > 1:
+                        draw.text((badge_r_x, badge_r_y + 25), discount.split()[1], fill='#FFD700', 
+                                font=font_badge_small, anchor='mm', stroke_width=0)
+                    
+                    # PRODUCT IMAGE - centered, 50% width
+                    img_width = int(fmt['size'][0] * 0.50)
                     img_ratio = img.height / img.width
                     img_height = int(img_width * img_ratio)
                     
-                    # Limit height to 60% 
-                    max_img_height = int(fmt['size'][1] * 0.6)
+                    # Limit height
+                    max_img_height = int(fmt['size'][1] * 0.55)
                     if img_height > max_img_height:
                         img_height = max_img_height
                         img_width = int(img_height / img_ratio)
                     
                     resized_img = img.resize((img_width, img_height))
                     
-                    # Center product vertically
+                    # Position product - center
                     x = (fmt['size'][0] - img_width) // 2
-                    y = int(fmt['size'][1] * 0.20)  # Start at 20% from top
+                    y = int(fmt['size'][1] * 0.23)
                     canvas.paste(resized_img, (x, y), resized_img if resized_img.mode == 'RGBA' else None)
                     
-                    # TEXT - Following reference composition
+                    # Redraw after image
                     draw = ImageDraw.Draw(canvas)
                     
-                    # BOLD fonts matching reference style
-                    try:
-                        font_headline = ImageFont.truetype("arialbd.ttf", 95)  # NEW LOOK
-                        font_subhead = ImageFont.truetype("arialbd.ttf", 60)   # SAME AWARD WINNING TASTE
-                        font_small = ImageFont.truetype("arial.ttf", 35)       # Available in all major retailers
-                        font_badge = ImageFont.truetype("arialbd.ttf", 50)     # Badge text
-                    except:
-                        try:
-                            font_headline = ImageFont.truetype("Arial.ttf", 95)
-                            font_subhead = ImageFont.truetype("Arial.ttf", 60)
-                            font_small = ImageFont.truetype("Arial.ttf", 35)
-                            font_badge = ImageFont.truetype("Arial.ttf", 50)
-                        except:
-                            font_headline = font_subhead = font_small = font_badge = ImageFont.load_default()
+                    # BOTTOM TEXT - RIGHT NEXT TO PRODUCT (like reference)
+                    text_start_y = y + img_height - 200  # Position text next to bottom of product
                     
-                    palette_idx = ["Tesco Official", "Purple Gradient", "Blue Green", "Warm Sunset"].index(selected_palette)
+                    # "NEW LOOK" - MASSIVE BOLD BLACK
+                    draw.text((center_x, text_start_y), headline.upper(), fill='#000000', 
+                            font=font_mega, anchor='mm', stroke_width=0)
                     
-                    headline = random.choice(headlines)
-                    price = random.choice(prices)
-                    offer = random.choice(offers)
-                    subtext = random.choice(subtexts)
+                    # "SAME AWARD WINNING TASTE" - Large bold
+                    draw.text((center_x, text_start_y + 120), offer.upper(), fill='#000000', 
+                            font=font_hero, anchor='mm', stroke_width=0)
                     
-                    # TOP LEFT - Circular badge (like BRANCOTT ESTATE in reference)
-                    badge_radius = 100
-                    badge_x, badge_y = 80, 80
-                    logo_color = st.session_state.color_palettes[palette_idx][0]
-                    draw.ellipse([badge_x - badge_radius, badge_y - badge_radius, 
-                                 badge_x + badge_radius, badge_y + badge_radius], 
-                                fill='#FFB700', outline=None)
-                    draw.text((badge_x, badge_y - 20), 'TESCO', fill='black', font=font_badge, 
-                            anchor='mm', stroke_width=0)
-                    draw.text((badge_x, badge_y + 30), 'VALUE', fill='black', font=font_small, 
-                            anchor='mm', stroke_width=0)
-                    
-                    # TOP RIGHT - Award badge (like WORLD WINE AWARDS in reference)
-                    badge_r_radius = 90
-                    badge_r_x = fmt['size'][0] - 120
-                    badge_r_y = 100
-                    draw.ellipse([badge_r_x - badge_r_radius, badge_r_y - badge_r_radius, 
-                                 badge_r_x + badge_r_radius, badge_r_y + badge_r_radius], 
-                                fill='#8B4513', outline='#FFD700', width=5)
-                    discount = random.choice(['35% OFF', '50% OFF', 'SALE', 'BOGO'])
-                    draw.text((badge_r_x, badge_r_y), discount, fill='#FFD700', font=font_badge, 
-                            anchor='mm', stroke_width=2, stroke_fill='black')
-                    
-                    # BOTTOM SECTION - Text like reference
-                    bottom_start_y = fmt['size'][1] - 280
-                    center_x = fmt['size'][0] // 2
-                    
-                    # Main headline - BOLD and BLACK (like "NEW LOOK")
-                    draw.text((center_x, bottom_start_y), headline.upper(), fill='#000000', 
-                            font=font_headline, anchor='mm', stroke_width=0)
-                    
-                    # Subheadline (like "SAME AWARD WINNING TASTE")
-                    draw.text((center_x, bottom_start_y + 80), offer.upper(), fill='#000000', 
-                            font=font_subhead, anchor='mm', stroke_width=0)
-                    
-                    # Small text at bottom (like "Available in all major retailers")
-                    draw.text((center_x, bottom_start_y + 150), subtext, fill='#000000', 
-                            font=font_small, anchor='mm', stroke_width=0)
+                    # "Available in all major retailers" - Small at very bottom
+                    draw.text((center_x, fmt['size'][1] - 70), subtext, fill='#000000', 
+                            font=font_medium, anchor='mm', stroke_width=0)
                     
                     st.session_state.generated_ads.append({
                         'image': canvas,
