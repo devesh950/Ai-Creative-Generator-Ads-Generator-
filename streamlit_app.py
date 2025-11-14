@@ -15,9 +15,23 @@ st.set_page_config(
 # Custom CSS with vibrant colors
 st.markdown("""
 <style>
+    /* Responsive container */
+    .block-container {
+        max-width: 100vw !important;
+        padding: 0.5rem 1rem !important;
+        overflow-x: hidden !important;
+    }
+    
+    /* Prevent horizontal scroll */
+    html, body {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+    }
+    
     /* Main background */
     .stApp {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        overflow-x: hidden !important;
     }
     
     [data-testid="stAppViewContainer"] {
@@ -38,18 +52,19 @@ st.markdown("""
         font-weight: 700 !important;
         text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
         background: rgba(0,0,0,0.2);
-        padding: 0.5rem;
-        border-radius: 8px;
+        padding: 0.3rem;
+        border-radius: 6px;
+        font-size: 1rem !important;
     }
     
     [data-testid="stSidebar"] label {
         color: white !important;
         font-weight: 700 !important;
-        font-size: 16px !important;
+        font-size: 0.85rem !important;
         text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         background: rgba(0,0,0,0.15);
-        padding: 0.25rem 0.5rem;
-        border-radius: 6px;
+        padding: 0.2rem 0.4rem;
+        border-radius: 5px;
         display: inline-block;
     }
     
@@ -79,11 +94,11 @@ st.markdown("""
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
         color: white !important;
         border: none;
-        padding: 0.75rem 1.5rem;
-        border-radius: 12px;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
         font-weight: 600;
-        font-size: 16px;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        font-size: 0.85rem;
+        box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
         transition: all 0.3s ease;
     }
     
@@ -97,10 +112,10 @@ st.markdown("""
         background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
         color: white !important;
         border: none;
-        padding: 0.5rem 1rem;
+        padding: 0.4rem 0.8rem;
         border-radius: 8px;
         font-weight: 600;
-        font-size: 14px;
+        font-size: 0.8rem;
     }
     
     /* Headings */
