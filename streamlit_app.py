@@ -644,17 +644,17 @@ if st.session_state.uploaded_images:
                     for bold_path, regular_path in font_paths:
                         try:
                             if is_vertical:  # Stories/Reels
-                                font_headline = ImageFont.truetype(bold_path, 88)
-                                font_subhead = ImageFont.truetype(regular_path, 48)
-                                font_cta = ImageFont.truetype(bold_path, 70)
+                                font_headline = ImageFont.truetype(bold_path, 62)
+                                font_subhead = ImageFont.truetype(regular_path, 34)
+                                font_cta = ImageFont.truetype(bold_path, 50)
                             elif is_wide:  # Facebook Banner
-                                font_headline = ImageFont.truetype(bold_path, 68)
-                                font_subhead = ImageFont.truetype(regular_path, 38)
-                                font_cta = ImageFont.truetype(bold_path, 54)
+                                font_headline = ImageFont.truetype(bold_path, 48)
+                                font_subhead = ImageFont.truetype(regular_path, 27)
+                                font_cta = ImageFont.truetype(bold_path, 38)
                             else:  # Square
-                                font_headline = ImageFont.truetype(bold_path, 78)
-                                font_subhead = ImageFont.truetype(regular_path, 44)
-                                font_cta = ImageFont.truetype(bold_path, 64)
+                                font_headline = ImageFont.truetype(bold_path, 55)
+                                font_subhead = ImageFont.truetype(regular_path, 31)
+                                font_cta = ImageFont.truetype(bold_path, 45)
                             break  # Success, exit loop
                         except:
                             continue  # Try next font path
