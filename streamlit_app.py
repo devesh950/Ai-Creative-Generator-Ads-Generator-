@@ -524,36 +524,100 @@ if st.session_state.uploaded_images:
         if st.button("🎨 Generate Professional Creatives", use_container_width=True):
             st.info("Generating creatives...")
             
-            # Ad formats
+            # All Social Media Ad Formats
             formats = [
-                {'name': 'Instagram Post', 'size': (1080, 1080)},
-                {'name': 'Instagram Story', 'size': (1080, 1920)},
-                {'name': 'Facebook Banner', 'size': (1200, 628)},
-                {'name': 'Facebook Post', 'size': (1200, 1200)}
+                {'name': 'Instagram Post', 'size': (1080, 1080), 'ratio': '1:1'},
+                {'name': 'Instagram Story', 'size': (1080, 1920), 'ratio': '9:16'},
+                {'name': 'Instagram Reel Cover', 'size': (1080, 1920), 'ratio': '9:16'},
+                {'name': 'Facebook Post', 'size': (1200, 628), 'ratio': '1.91:1'},
+                {'name': 'Facebook Story', 'size': (1080, 1920), 'ratio': '9:16'}
             ]
             
-            headlines = ['NEW LOOK', 'PREMIUM QUALITY', 'FRESH ARRIVALS', 'BEST SELLER']
-            offers = ['UP TO 50% OFF', 'BUY 1 GET 1 FREE', 'FLAT ₹200 OFF', '35% OFF TODAY']
-            prices = ['₹299', '₹449', '₹599', '₹349']
-            subtexts = ['Available in all major retailers', 'Limited time only', 'Shop now at tescoindia.com']
+            # Variety of fashion-focused text content - each image gets unique text
+            headlines = [
+                'PREMIUM NEW ARRIVAL',
+                'EXCLUSIVE COLLECTION',
+                'TRENDING NOW',
+                'SUMMER ESSENTIALS',
+                'LIMITED EDITION',
+                'STYLE REDEFINED',
+                'FASHION FORWARD',
+                'BEST SELLER',
+                'HOT DEAL',
+                'FRESH ARRIVALS',
+                'MUST HAVE',
+                'SEASONAL FAVORITES',
+                'TOP PICKS',
+                'SIGNATURE COLLECTION',
+                'MODERN CLASSICS'
+            ]
             
-            # Gradient backgrounds
+            subheadlines = [
+                'Trendy. Comfortable. Affordable.',
+                'Elevate Your Style',
+                'Where Quality Meets Fashion',
+                'Express Yourself',
+                'Stand Out from the Crowd',
+                'Affordable Luxury',
+                'Be Bold. Be You.',
+                'Look Good. Feel Great.',
+                'Style That Speaks',
+                'Your Wardrobe Essential',
+                'Confidence In Every Stitch',
+                'Dress To Impress',
+                'Fashion Meets Function',
+                'Timeless. Elegant. You.',
+                'Unleash Your Style'
+            ]
+            
+            ctas = [
+                'SHOP NOW',
+                'BUY NOW',
+                'GET YOURS',
+                'DISCOVER MORE',
+                'ORDER TODAY',
+                'SHOP THE LOOK',
+                'ADD TO CART',
+                'GRAB IT NOW',
+                'LIMITED STOCK',
+                'EXPLORE NOW'
+            ]
+            
+            # Stylish vibrant gradient backgrounds
             gradients = [
-                ((102, 126, 234), (118, 75, 162)),
-                ((240, 147, 251), (245, 87, 108)),
-                ((79, 172, 254), (0, 242, 254)),
-                ((67, 233, 123), (56, 249, 215))
+                ((255, 223, 186), (255, 179, 186)),  # Peach to coral
+                ((179, 229, 252), (240, 98, 146)),   # Sky blue to pink
+                ((168, 230, 207), (220, 237, 200)),  # Mint to lime
+                ((255, 195, 113), (255, 87, 51)),    # Orange sunset
+                ((189, 195, 199), (44, 62, 80)),     # Silver to navy
+                ((253, 203, 110), (255, 107, 107)),  # Gold to red
+                ((108, 92, 231), (255, 175, 189))    # Purple to pink
             ]
             
             st.session_state.generated_ads = []
             
+            # Shuffle text options to ensure variety
+            import random
+            shuffled_headlines = headlines.copy()
+            shuffled_subheadlines = subheadlines.copy()
+            shuffled_ctas = ctas.copy()
+            random.shuffle(shuffled_headlines)
+            random.shuffle(shuffled_subheadlines)
+            random.shuffle(shuffled_ctas)
+            
+            text_index = 0
             for img in st.session_state.uploaded_images:
                 for fmt in formats:
-                    # Canvas with gradient background
+                    # Pick different text for EACH banner (not just each image)
+                    headline = shuffled_headlines[text_index % len(shuffled_headlines)]
+                    subheadline = shuffled_subheadlines[text_index % len(shuffled_subheadlines)]
+                    cta = shuffled_ctas[text_index % len(shuffled_ctas)]
+                    text_index += 1
+                    # Canvas with soft gradient
                     canvas = Image.new('RGB', fmt['size'], color='white')
                     draw = ImageDraw.Draw(canvas)
                     
-                    # Apply gradient
+                    # Apply subtle gradient
                     gradient = gradients[random.randint(0, len(gradients)-1)]
                     for i in range(fmt['size'][1]):
                         r = int(gradient[0][0] + (gradient[1][0] - gradient[0][0]) * i / fmt['size'][1])
@@ -561,80 +625,182 @@ if st.session_state.uploaded_images:
                         b = int(gradient[0][2] + (gradient[1][2] - gradient[0][2]) * i / fmt['size'][1])
                         draw.rectangle([(0, i), (fmt['size'][0], i+1)], fill=(r, g, b))
                     
-                    # BALANCED fonts - professional size
+                    # Professional fonts for fashion/lifestyle
+                    is_vertical = fmt['size'][1] > fmt['size'][0]  # Story/Reel format
+                    is_wide = fmt['size'][0] > fmt['size'][1]  # Facebook Banner
+                    
                     try:
-                        font_title = ImageFont.truetype("arialbd.ttf", 140)      # Big but not too big
-                        font_subtitle = ImageFont.truetype("arialbd.ttf", 85)    # Readable
-                        font_small = ImageFont.truetype("arial.ttf", 45)         # Visible
-                        font_badge = ImageFont.truetype("arialbd.ttf", 42)
-                    except Exception as e:
-                        try:
-                            font_title = ImageFont.truetype("Arial.ttf", 160)
-                            font_subtitle = ImageFont.truetype("Arial.ttf", 95)
-                            font_small = ImageFont.truetype("Arial.ttf", 48)
-                            font_badge = ImageFont.truetype("Arial.ttf", 40)
-                        except:
-                            # Fallback to default with larger size
-                            font_title = ImageFont.load_default()
-                            font_subtitle = ImageFont.load_default()
-                            font_small = ImageFont.load_default()
-                            font_badge = ImageFont.load_default()
+                        if is_vertical:  # Stories/Reels
+                            font_headline = ImageFont.truetype("arialbd.ttf", 88)
+                            font_subhead = ImageFont.truetype("arial.ttf", 48)
+                            font_cta = ImageFont.truetype("arialbd.ttf", 70)
+                        elif is_wide:  # Facebook Banner
+                            font_headline = ImageFont.truetype("arialbd.ttf", 68)
+                            font_subhead = ImageFont.truetype("arial.ttf", 38)
+                            font_cta = ImageFont.truetype("arialbd.ttf", 54)
+                        else:  # Square
+                            font_headline = ImageFont.truetype("arialbd.ttf", 78)
+                            font_subhead = ImageFont.truetype("arial.ttf", 44)
+                            font_cta = ImageFont.truetype("arialbd.ttf", 64)
+                    except:
+                        font_headline = font_subhead = font_cta = ImageFont.load_default()
                     
                     center_x = fmt['size'][0] // 2
-                    palette_idx = ["Tesco Official", "Purple Gradient", "Blue Green", "Warm Sunset"].index(selected_palette)
+                    center_y = fmt['size'][1] // 2
                     
-                    # Corner badges
-                    draw = ImageDraw.Draw(canvas)
+                    # Format-specific layouts
+                    if is_vertical:  # Vertical formats (Stories/Reels)
+                        # TEXT at TOP - no product overlay
+                        draw = ImageDraw.Draw(canvas)
+                        
+                        # Headline at very TOP with margin
+                        draw.text((center_x, 120), headline, fill='#FFFFFF', 
+                                font=font_headline, anchor='mm', stroke_width=3, stroke_fill='#000000')
+                        
+                        # Subheadline below headline
+                        draw.text((center_x, 210), subheadline, fill='#FFFFFF', 
+                                font=font_subhead, anchor='mm', stroke_width=2, stroke_fill='#000000')
+                        
+                        # PRODUCT - positioned below text
+                        img_height = int(fmt['size'][1] * 0.48)
+                        img_ratio = img.width / img.height
+                        img_width = int(img_height * img_ratio)
+                        max_img_width = int(fmt['size'][0] * 0.68)
+                        if img_width > max_img_width:
+                            img_width = max_img_width
+                            img_height = int(img_width / img_ratio)
+                        
+                        resized_img = img.resize((img_width, img_height), Image.Resampling.LANCZOS)
+                        img_x = (fmt['size'][0] - img_width) // 2
+                        img_y = int(fmt['size'][1] * 0.32)  # Lower position
+                        # Ensure proper transparency
+                        if resized_img.mode == 'RGBA':
+                            canvas.paste(resized_img, (img_x, img_y), resized_img)
+                        else:
+                            canvas.paste(resized_img, (img_x, img_y))
+                        
+                        # CTA at BOTTOM - below product with rounded style
+                        cta_y = fmt['size'][1] - 160
+                        # CTA button with rounded corners (using multiple rectangles for effect)
+                        cta_width = 340
+                        cta_height = 96
+                        # Shadow layer
+                        draw.rectangle([center_x - cta_width//2 + 6, cta_y - cta_height//2 + 6, 
+                                      center_x + cta_width//2 + 6, cta_y + cta_height//2 + 6], 
+                                     fill='#00000040')  # Semi-transparent shadow
+                        # Main button with gradient effect (dark to light)
+                        for i in range(cta_height):
+                            color_val = int(20 + (40 * i / cta_height))
+                            draw.rectangle([center_x - cta_width//2, cta_y - cta_height//2 + i, 
+                                          center_x + cta_width//2, cta_y - cta_height//2 + i + 1], 
+                                         fill=(color_val, color_val, color_val))
+                        # Border
+                        draw.rectangle([center_x - cta_width//2, cta_y - cta_height//2, 
+                                      center_x + cta_width//2, cta_y + cta_height//2], 
+                                     outline='#FFD700', width=5)  # Gold border
+                        draw.text((center_x, cta_y), cta, fill='#FFFFFF', 
+                                font=font_cta, anchor='mm')
                     
-                    # Left badge - Gold
-                    draw.ellipse([30, 30, 160, 160], fill='#E8A317')
-                    draw.text((95, 75), 'TESCO', fill='#000000', font=font_badge, anchor='mm')
-                    draw.text((95, 110), 'VALUE', fill='#000000', font=font_small, anchor='mm')
+                    elif is_wide:  # Wide format (Facebook Banner)
+                        # TEXT - left side, no product overlay
+                        draw = ImageDraw.Draw(canvas)
+                        text_x = 80
+                        
+                        # Headline left-aligned with outline
+                        draw.text((text_x, center_y - 70), headline, fill='#FFFFFF', 
+                                font=font_headline, anchor='lm', stroke_width=3, stroke_fill='#000000')
+                        
+                        # Subheadline
+                        draw.text((text_x, center_y + 15), subheadline, fill='#FFFFFF', 
+                                font=font_subhead, anchor='lm', stroke_width=2, stroke_fill='#000000')
+                        
+                        # CTA button with modern style
+                        btn_x = text_x
+                        btn_y = center_y + 75
+                        btn_width = 260
+                        btn_height = 70
+                        # Shadow
+                        draw.rectangle([btn_x + 5, btn_y + 5, btn_x + btn_width + 5, btn_y + btn_height + 5], 
+                                     fill='#00000040')
+                        # Gradient fill
+                        for i in range(btn_height):
+                            color_val = int(20 + (40 * i / btn_height))
+                            draw.rectangle([btn_x, btn_y + i, btn_x + btn_width, btn_y + i + 1], 
+                                         fill=(color_val, color_val, color_val))
+                        # Gold border
+                        draw.rectangle([btn_x, btn_y, btn_x + btn_width, btn_y + btn_height], 
+                                     outline='#FFD700', width=4)
+                        draw.text((btn_x + btn_width//2, btn_y + btn_height//2), cta, fill='#FFFFFF', 
+                                font=font_cta, anchor='mm')
+                        
+                        # PRODUCT - right side, ensuring no text overlap
+                        img_height = int(fmt['size'][1] * 0.72)
+                        img_ratio = img.width / img.height
+                        img_width = int(img_height * img_ratio)
+                        max_img_width = int(fmt['size'][0] * 0.42)
+                        if img_width > max_img_width:
+                            img_width = max_img_width
+                            img_height = int(img_width / img_ratio)
+                        
+                        resized_img = img.resize((img_width, img_height), Image.Resampling.LANCZOS)
+                        img_x = fmt['size'][0] - img_width - 60
+                        img_y = (fmt['size'][1] - img_height) // 2
+                        # Ensure proper transparency
+                        if resized_img.mode == 'RGBA':
+                            canvas.paste(resized_img, (img_x, img_y), resized_img)
+                        else:
+                            canvas.paste(resized_img, (img_x, img_y))
                     
-                    # Right badge - Dark with gold border
-                    draw.ellipse([fmt['size'][0]-160, 30, fmt['size'][0]-30, 160], fill='#3E2723', outline='#FFD700', width=4)
-                    discount_text = random.choice(['35% OFF', '50% OFF', 'SALE'])
-                    draw.text((fmt['size'][0]-95, 95), discount_text, fill='#FFD700', font=font_badge, anchor='mm')
-                    
-                    # PRODUCT - Well balanced size
-                    img_height = int(fmt['size'][1] * 0.58)  # 58% height
-                    img_ratio = img.width / img.height
-                    img_width = int(img_height * img_ratio)
-                    
-                    # Limit width to 52%
-                    max_img_width = int(fmt['size'][0] * 0.52)
-                    if img_width > max_img_width:
-                        img_width = max_img_width
-                        img_height = int(img_width / img_ratio)
-                    
-                    resized_img = img.resize((img_width, img_height), Image.Resampling.LANCZOS)
-                    
-                    # Center product properly
-                    img_x = (fmt['size'][0] - img_width) // 2
-                    img_y = int(fmt['size'][1] * 0.15)  # 15% from top
-                    canvas.paste(resized_img, (img_x, img_y), resized_img if resized_img.mode == 'RGBA' else None)
-                    
-                    # TEXT - well positioned below product
-                    draw = ImageDraw.Draw(canvas)
-                    
-                    headline = random.choice(headlines)
-                    offer = random.choice(offers)
-                    subtext = random.choice(subtexts)
-                    
-                    # Text starts nicely below product
-                    text_y = img_y + img_height + 40
-                    
-                    # Title - Bold and clear
-                    draw.text((center_x, text_y), headline.upper(), fill='#000000', 
-                            font=font_title, anchor='mm')
-                    
-                    # Subtitle - Clear  
-                    draw.text((center_x, text_y + 110), offer.upper(), fill='#000000', 
-                            font=font_subtitle, anchor='mm')
-                    
-                    # Small text at bottom
-                    draw.text((center_x, fmt['size'][1] - 55), subtext, fill='#000000', 
-                            font=font_small, anchor='mm')
+                    else:  # Square format (Instagram Post)
+                        # TEXT at TOP - above product
+                        draw = ImageDraw.Draw(canvas)
+                        
+                        # Headline at TOP with outline
+                        draw.text((center_x, 100), headline, fill='#FFFFFF', 
+                                font=font_headline, anchor='mm', stroke_width=3, stroke_fill='#000000')
+                        
+                        # Subheadline
+                        draw.text((center_x, 180), subheadline, fill='#FFFFFF', 
+                                font=font_subhead, anchor='mm', stroke_width=2, stroke_fill='#000000')
+                        
+                        # PRODUCT - centered below text
+                        img_height = int(fmt['size'][1] * 0.52)
+                        img_ratio = img.width / img.height
+                        img_width = int(img_height * img_ratio)
+                        max_img_width = int(fmt['size'][0] * 0.62)
+                        if img_width > max_img_width:
+                            img_width = max_img_width
+                            img_height = int(img_width / img_ratio)
+                        
+                        resized_img = img.resize((img_width, img_height), Image.Resampling.LANCZOS)
+                        img_x = (fmt['size'][0] - img_width) // 2
+                        img_y = int(fmt['size'][1] * 0.26)
+                        # Ensure proper transparency
+                        if resized_img.mode == 'RGBA':
+                            canvas.paste(resized_img, (img_x, img_y), resized_img)
+                        else:
+                            canvas.paste(resized_img, (img_x, img_y))
+                        
+                        # CTA at BOTTOM - below product with modern style
+                        cta_y = fmt['size'][1] - 130
+                        btn_width = 340
+                        btn_height = 84
+                        # Shadow
+                        draw.rectangle([center_x - btn_width//2 + 5, cta_y - btn_height//2 + 5, 
+                                      center_x + btn_width//2 + 5, cta_y + btn_height//2 + 5], 
+                                     fill='#00000040')
+                        # Gradient fill
+                        for i in range(btn_height):
+                            color_val = int(20 + (40 * i / btn_height))
+                            draw.rectangle([center_x - btn_width//2, cta_y - btn_height//2 + i, 
+                                          center_x + btn_width//2, cta_y - btn_height//2 + i + 1], 
+                                         fill=(color_val, color_val, color_val))
+                        # Gold border
+                        draw.rectangle([center_x - btn_width//2, cta_y - btn_height//2, 
+                                      center_x + btn_width//2, cta_y + btn_height//2], 
+                                     outline='#FFD700', width=5)
+                        draw.text((center_x, cta_y), cta, fill='#FFFFFF', 
+                                font=font_cta, anchor='mm')
                     
                     st.session_state.generated_ads.append({
                         'image': canvas,
