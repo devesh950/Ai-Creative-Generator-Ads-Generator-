@@ -561,68 +561,68 @@ if st.session_state.uploaded_images:
                         b = int(gradient[0][2] + (gradient[1][2] - gradient[0][2]) * i / fmt['size'][1])
                         draw.rectangle([(0, i), (fmt['size'][0], i+1)], fill=(r, g, b))
                     
-                    # BIG FONTS FIRST
+                    # Fonts
                     try:
-                        font_massive = ImageFont.truetype("arialbd.ttf", 130)  # Main title
-                        font_big = ImageFont.truetype("arialbd.ttf", 75)       # Subtitle
-                        font_normal = ImageFont.truetype("arial.ttf", 40)      # Small text
-                        font_badge = ImageFont.truetype("arialbd.ttf", 38)     # Badge
+                        font_title = ImageFont.truetype("arialbd.ttf", 95)
+                        font_subtitle = ImageFont.truetype("arialbd.ttf", 58)
+                        font_small = ImageFont.truetype("arial.ttf", 32)
+                        font_badge = ImageFont.truetype("arialbd.ttf", 35)
                     except:
-                        font_massive = font_big = font_normal = font_badge = ImageFont.load_default()
+                        font_title = font_subtitle = font_small = font_badge = ImageFont.load_default()
                     
                     center_x = fmt['size'][0] // 2
                     palette_idx = ["Tesco Official", "Purple Gradient", "Blue Green", "Warm Sunset"].index(selected_palette)
                     
-                    # Small corner badges
+                    # Corner badges - SMALL like reference
                     draw = ImageDraw.Draw(canvas)
-                    draw.ellipse([40, 40, 180, 180], fill='#E8A317')
-                    draw.text((110, 95), 'TESCO', fill='#000000', font=font_badge, anchor='mm')
-                    draw.text((110, 125), 'VALUE', fill='#000000', font=font_normal, anchor='mm')
+                    draw.ellipse([30, 30, 150, 150], fill='#D4A017')
+                    draw.text((90, 70), 'TESCO', fill='#000000', font=font_badge, anchor='mm')
+                    draw.text((90, 100), 'ESTATE', fill='#000000', font=font_small, anchor='mm')
                     
-                    draw.ellipse([fmt['size'][0]-180, 40, fmt['size'][0]-40, 180], fill='#4A3C2E', outline='#FFD700', width=4)
-                    discount = random.choice(['35%', '50%', 'SALE'])
-                    draw.text((fmt['size'][0]-110, 90), discount, fill='#FFD700', font=font_badge, anchor='mm')
-                    draw.text((fmt['size'][0]-110, 125), 'OFF', fill='#FFD700', font=font_normal, anchor='mm')
+                    draw.ellipse([fmt['size'][0]-150, 30, fmt['size'][0]-30, 150], fill='#3E2723', outline='#FFD700', width=3)
+                    draw.text((fmt['size'][0]-90, 65), 'WORLD', fill='#FFD700', font=font_small, anchor='mm')
+                    draw.text((fmt['size'][0]-90, 90), 'WINE', fill='#FFD700', font=font_badge, anchor='mm')
+                    draw.text((fmt['size'][0]-90, 115), 'AWARDS', fill='#FFD700', font=font_small, anchor='mm')
                     
-                    # PRODUCT - BIG AND CENTER
-                    img_width = int(fmt['size'][0] * 0.55)  # 55% width
-                    img_ratio = img.height / img.width
-                    img_height = int(img_width * img_ratio)
+                    # PRODUCT - HUGE (70% height)
+                    img_height = int(fmt['size'][1] * 0.70)
+                    img_ratio = img.width / img.height
+                    img_width = int(img_height * img_ratio)
                     
-                    # Limit to 50% height to leave room for text
-                    max_img_height = int(fmt['size'][1] * 0.50)
-                    if img_height > max_img_height:
-                        img_height = max_img_height
-                        img_width = int(img_height / img_ratio)
+                    # Limit width to 50% if too wide
+                    max_img_width = int(fmt['size'][0] * 0.50)
+                    if img_width > max_img_width:
+                        img_width = max_img_width
+                        img_height = int(img_width / img_ratio)
                     
                     resized_img = img.resize((img_width, img_height))
                     
-                    # Center horizontally, start at 15% from top
+                    # Center product vertically and horizontally
                     img_x = (fmt['size'][0] - img_width) // 2
-                    img_y = int(fmt['size'][1] * 0.15)
+                    img_y = (fmt['size'][1] - img_height) // 2 - 20
                     canvas.paste(resized_img, (img_x, img_y), resized_img if resized_img.mode == 'RGBA' else None)
                     
-                    # BIG TEXT BELOW PRODUCT
+                    # TEXT - positioned below product
                     draw = ImageDraw.Draw(canvas)
                     
                     headline = random.choice(headlines)
                     offer = random.choice(offers)
                     subtext = random.choice(subtexts)
                     
-                    # Position text right after product ends
-                    text_start_y = img_y + img_height + 40
+                    # Text starts after product
+                    text_y = img_y + img_height + 30
                     
-                    # BIG BOLD TITLE
-                    draw.text((center_x, text_start_y), headline.upper(), fill='#000000', 
-                            font=font_massive, anchor='mm', stroke_width=0)
+                    # Title
+                    draw.text((center_x, text_y), headline.upper(), fill='#000000', 
+                            font=font_title, anchor='mm')
                     
-                    # BIG SUBTITLE
-                    draw.text((center_x, text_start_y + 110), offer.upper(), fill='#000000', 
-                            font=font_big, anchor='mm', stroke_width=0)
+                    # Subtitle
+                    draw.text((center_x, text_y + 80), offer.upper(), fill='#000000', 
+                            font=font_subtitle, anchor='mm')
                     
-                    # Small text at bottom
-                    draw.text((center_x, fmt['size'][1] - 55), subtext, fill='#000000', 
-                            font=font_normal, anchor='mm', stroke_width=0)
+                    # Small text at very bottom
+                    draw.text((center_x, fmt['size'][1] - 45), subtext, fill='#000000', 
+                            font=font_small, anchor='mm')
                     
                     st.session_state.generated_ads.append({
                         'image': canvas,
