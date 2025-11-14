@@ -563,9 +563,9 @@ if st.session_state.uploaded_images:
                     
                     # Fonts
                     try:
-                        font_title = ImageFont.truetype("arialbd.ttf", 95)
-                        font_subtitle = ImageFont.truetype("arialbd.ttf", 58)
-                        font_small = ImageFont.truetype("arial.ttf", 32)
+                        font_title = ImageFont.truetype("arialbd.ttf", 160)      # MUCH BIGGER
+                        font_subtitle = ImageFont.truetype("arialbd.ttf", 95)    # MUCH BIGGER
+                        font_small = ImageFont.truetype("arial.ttf", 48)         # MUCH BIGGER
                         font_badge = ImageFont.truetype("arialbd.ttf", 35)
                     except:
                         font_title = font_subtitle = font_small = font_badge = ImageFont.load_default()
