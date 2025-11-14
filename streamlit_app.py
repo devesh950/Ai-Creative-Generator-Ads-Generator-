@@ -561,56 +561,68 @@ if st.session_state.uploaded_images:
                         b = int(gradient[0][2] + (gradient[1][2] - gradient[0][2]) * i / fmt['size'][1])
                         draw.rectangle([(0, i), (fmt['size'][0], i+1)], fill=(r, g, b))
                     
-                    # Product first - Large and centered
-                    img_width = int(fmt['size'][0] * 0.48)
+                    # BIG FONTS FIRST
+                    try:
+                        font_massive = ImageFont.truetype("arialbd.ttf", 130)  # Main title
+                        font_big = ImageFont.truetype("arialbd.ttf", 75)       # Subtitle
+                        font_normal = ImageFont.truetype("arial.ttf", 40)      # Small text
+                        font_badge = ImageFont.truetype("arialbd.ttf", 38)     # Badge
+                    except:
+                        font_massive = font_big = font_normal = font_badge = ImageFont.load_default()
+                    
+                    center_x = fmt['size'][0] // 2
+                    palette_idx = ["Tesco Official", "Purple Gradient", "Blue Green", "Warm Sunset"].index(selected_palette)
+                    
+                    # Small corner badges
+                    draw = ImageDraw.Draw(canvas)
+                    draw.ellipse([40, 40, 180, 180], fill='#E8A317')
+                    draw.text((110, 95), 'TESCO', fill='#000000', font=font_badge, anchor='mm')
+                    draw.text((110, 125), 'VALUE', fill='#000000', font=font_normal, anchor='mm')
+                    
+                    draw.ellipse([fmt['size'][0]-180, 40, fmt['size'][0]-40, 180], fill='#4A3C2E', outline='#FFD700', width=4)
+                    discount = random.choice(['35%', '50%', 'SALE'])
+                    draw.text((fmt['size'][0]-110, 90), discount, fill='#FFD700', font=font_badge, anchor='mm')
+                    draw.text((fmt['size'][0]-110, 125), 'OFF', fill='#FFD700', font=font_normal, anchor='mm')
+                    
+                    # PRODUCT - BIG AND CENTER
+                    img_width = int(fmt['size'][0] * 0.55)  # 55% width
                     img_ratio = img.height / img.width
                     img_height = int(img_width * img_ratio)
-                    max_img_height = int(fmt['size'][1] * 0.58)
+                    
+                    # Limit to 50% height to leave room for text
+                    max_img_height = int(fmt['size'][1] * 0.50)
                     if img_height > max_img_height:
                         img_height = max_img_height
                         img_width = int(img_height / img_ratio)
                     
                     resized_img = img.resize((img_width, img_height))
+                    
+                    # Center horizontally, start at 15% from top
                     img_x = (fmt['size'][0] - img_width) // 2
-                    img_y = int(fmt['size'][1] * 0.18)
+                    img_y = int(fmt['size'][1] * 0.15)
                     canvas.paste(resized_img, (img_x, img_y), resized_img if resized_img.mode == 'RGBA' else None)
                     
-                    # Fonts - BIG and BOLD
-                    try:
-                        font_title = ImageFont.truetype("arialbd.ttf", 110)
-                        font_subtitle = ImageFont.truetype("arialbd.ttf", 68)
-                        font_small = ImageFont.truetype("arial.ttf", 38)
-                        font_badge = ImageFont.truetype("arialbd.ttf", 42)
-                    except:
-                        font_title = font_subtitle = font_small = font_badge = ImageFont.load_default()
-                    
+                    # BIG TEXT BELOW PRODUCT
                     draw = ImageDraw.Draw(canvas)
-                    center_x = fmt['size'][0] // 2
-                    palette_idx = ["Tesco Official", "Purple Gradient", "Blue Green", "Warm Sunset"].index(selected_palette)
                     
-                    # Badges
-                    # Left badge
-                    draw.ellipse([50, 50, 200, 200], fill='#E8A317')
-                    draw.text((125, 105), 'TESCO', fill='#000000', font=font_badge, anchor='mm')
-                    draw.text((125, 145), 'VALUE', fill='#000000', font=font_small, anchor='mm')
-                    
-                    # Right badge  
-                    draw.ellipse([fmt['size'][0]-200, 50, fmt['size'][0]-50, 200], fill='#4A3C2E', outline='#FFD700', width=4)
-                    discount = random.choice(['35%\nOFF', '50%\nOFF', 'SALE'])
-                    lines = discount.split('\n')
-                    draw.text((fmt['size'][0]-125, 110 if len(lines)==1 else 95), lines[0], fill='#FFD700', font=font_badge, anchor='mm')
-                    if len(lines) > 1:
-                        draw.text((fmt['size'][0]-125, 135), lines[1], fill='#FFD700', font=font_small, anchor='mm')
-                    
-                    # Text at bottom - centered below product
                     headline = random.choice(headlines)
                     offer = random.choice(offers)
                     subtext = random.choice(subtexts)
                     
-                    text_y = img_y + img_height + 50
-                    draw.text((center_x, text_y), headline.upper(), fill='#000000', font=font_title, anchor='mm')
-                    draw.text((center_x, text_y + 95), offer.upper(), fill='#000000', font=font_subtitle, anchor='mm')
-                    draw.text((center_x, fmt['size'][1] - 60), subtext, fill='#000000', font=font_small, anchor='mm')
+                    # Position text right after product ends
+                    text_start_y = img_y + img_height + 40
+                    
+                    # BIG BOLD TITLE
+                    draw.text((center_x, text_start_y), headline.upper(), fill='#000000', 
+                            font=font_massive, anchor='mm', stroke_width=0)
+                    
+                    # BIG SUBTITLE
+                    draw.text((center_x, text_start_y + 110), offer.upper(), fill='#000000', 
+                            font=font_big, anchor='mm', stroke_width=0)
+                    
+                    # Small text at bottom
+                    draw.text((center_x, fmt['size'][1] - 55), subtext, fill='#000000', 
+                            font=font_normal, anchor='mm', stroke_width=0)
                     
                     st.session_state.generated_ads.append({
                         'image': canvas,
