@@ -18,7 +18,7 @@ st.markdown("""
     /* Responsive container */
     .block-container {
         max-width: 100vw !important;
-        padding: 0.5rem 1rem !important;
+        padding: 0.3rem 0.5rem !important;
         overflow-x: hidden !important;
     }
     
@@ -26,6 +26,19 @@ st.markdown("""
     html, body {
         overflow-x: hidden !important;
         max-width: 100vw !important;
+    }
+    
+    /* Force columns to wrap */
+    [data-testid="column"] {
+        max-width: 100% !important;
+        padding: 0 0.3rem !important;
+        min-width: 0 !important;
+    }
+    
+    /* Word wrap everything */
+    * {
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
     }
     
     /* Main background */
@@ -124,34 +137,38 @@ st.markdown("""
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        font-size: 1.3rem !important;
+        font-size: 1.1rem !important;
         font-weight: 700 !important;
         text-align: center;
         margin: 0 !important;
         padding: 0 !important;
+        line-height: 1.3 !important;
     }
     
     h2 {
         color: #667eea !important;
         font-weight: 700 !important;
-        font-size: 1rem !important;
+        font-size: 0.9rem !important;
+        margin: 0.3rem 0 !important;
     }
     
     h3 {
         color: #764ba2 !important;
         font-weight: 600 !important;
-        font-size: 0.9rem !important;
+        font-size: 0.8rem !important;
+        margin: 0.2rem 0 !important;
     }
     
     /* Feature cards */
     .feature-card {
         background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
-        padding: 0.5rem;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.06);
-        margin: 0.3rem 0;
-        border: 2px solid #e0e7ff;
+        padding: 0.4rem;
+        border-radius: 8px;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+        margin: 0.2rem 0;
+        border: 1px solid #e0e7ff;
         transition: transform 0.3s ease;
+        max-width: 100%;
     }
     
     .feature-card:hover {
@@ -160,16 +177,17 @@ st.markdown("""
     }
     
     .feature-card h3 {
-        font-size: 0.85rem;
-        margin-bottom: 0.2rem;
+        font-size: 0.75rem;
+        margin: 0 0 0.15rem 0;
         color: #667eea !important;
         font-weight: 700 !important;
+        line-height: 1.2;
     }
     
     .feature-card p {
         color: #1f2937 !important;
-        font-size: 0.75rem;
-        line-height: 1.3;
+        font-size: 0.7rem;
+        line-height: 1.2;
         font-weight: 500;
         margin: 0;
     }
@@ -309,9 +327,9 @@ if 'generated_ads' not in st.session_state:
 
 # Header with attractive styling
 st.markdown("""
-<div style='text-align: center; padding: 0.3rem 0;'>
-    <h1 style='font-size: 1.3rem; margin: 0;'>✨ AI Creative Generator ✨</h1>
-    <p style='font-size: 0.7rem; color: #667eea; font-weight: 600; margin: 0.1rem 0;'>
+<div style='text-align: center; padding: 0.2rem 0; margin: 0;'>
+    <h1 style='font-size: 1.1rem; margin: 0;'>✨ AI Creative Generator ✨</h1>
+    <p style='font-size: 0.65rem; color: #667eea; font-weight: 600; margin: 0;'>
         AI-Powered Fashion Ads
     </p>
 </div>
