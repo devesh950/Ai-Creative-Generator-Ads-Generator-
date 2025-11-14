@@ -109,16 +109,17 @@ st.markdown("""
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        font-size: 3.5rem !important;
+        font-size: 2.2rem !important;
         font-weight: 800 !important;
         text-align: center;
         margin-bottom: 0.5rem;
+        padding: 0.5rem 0;
     }
     
     h2 {
         color: #667eea !important;
         font-weight: 700 !important;
-        font-size: 2rem !important;
+        font-size: 1.5rem !important;
     }
     
     h3 {
@@ -129,10 +130,10 @@ st.markdown("""
     /* Feature cards */
     .feature-card {
         background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
-        padding: 2rem;
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        margin: 1rem 0;
+        padding: 1.2rem;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        margin: 0.8rem 0;
         border: 2px solid #e0e7ff;
         transition: transform 0.3s ease;
     }
@@ -143,17 +144,18 @@ st.markdown("""
     }
     
     .feature-card h3 {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
+        font-size: 1.2rem;
+        margin-bottom: 0.6rem;
         color: #667eea !important;
         font-weight: 700 !important;
     }
     
     .feature-card p {
         color: #1f2937 !important;
-        font-size: 1.05rem;
-        line-height: 1.6;
+        font-size: 0.95rem;
+        line-height: 1.5;
         font-weight: 500;
+        margin-bottom: 0.3rem;
     }
     
     /* Stat cards */
@@ -291,10 +293,10 @@ if 'generated_ads' not in st.session_state:
 
 # Header with attractive styling
 st.markdown("""
-<div style='text-align: center; padding: 2rem 0;'>
-    <h1 style='font-size: 4rem; margin-bottom: 0;'>✨ AI Creative Generator ✨</h1>
-    <p style='font-size: 1.5rem; color: #667eea; font-weight: 600; margin-top: 0.5rem;'>
-        Powered by AI • Tesco Retail Media Innovation
+<div style='text-align: center; padding: 1rem 0 0.5rem 0;'>
+    <h1 style='font-size: 2.2rem; margin-bottom: 0;'>✨ AI Creative Generator ✨</h1>
+    <p style='font-size: 1.1rem; color: #667eea; font-weight: 600; margin-top: 0.3rem;'>
+        Powered by AI • Fashion Retail Media Innovation
     </p>
 </div>
 """, unsafe_allow_html=True)
